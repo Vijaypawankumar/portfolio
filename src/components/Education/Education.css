@@ -1,0 +1,125 @@
+.education {
+  padding: 120px 0;
+  background: var(--white);
+  border-top: 1px solid var(--border);
+}
+
+.education__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.education__degrees {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-bottom: 80px;
+}
+
+.education__degree {
+  padding: 48px 48px 48px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.education__degree:nth-child(2) {
+  padding-left: 60px;
+  padding-right: 0;
+  border-left: 1px solid var(--border);
+}
+
+.education__degree-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--blue);
+  margin-bottom: 20px;
+  padding: 3px 10px;
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: 3px;
+  display: inline-block;
+  background: var(--blue-light);
+}
+
+.education__degree-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  letter-spacing: 0.02em;
+  color: var(--black);
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.education__degree-school {
+  font-size: 13px;
+  color: var(--blue);
+  font-weight: 600;
+  margin-bottom: 14px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+.education__degree-focus {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+  font-weight: 300;
+}
+
+/* Certs */
+.education__certs-section {
+  padding-top: 60px;
+}
+
+.education__certs {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.education__cert {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+  transition: padding-left 0.3s ease;
+}
+
+.education__cert:hover {
+  padding-left: 12px;
+}
+
+.education__cert-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--black);
+}
+
+.education__cert-meta {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.education__cert-year {
+  color: var(--blue);
+}
+
+@media (max-width: 900px) {
+  .education__degrees {
+    grid-template-columns: 1fr;
+  }
+
+  .education__degree:nth-child(2) {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  .education__inner {
+    padding: 0 24px;
+  }
+}

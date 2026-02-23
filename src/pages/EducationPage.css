@@ -1,0 +1,170 @@
+.edu-page__degrees {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* ============================= */
+/* DEGREE CARD */
+/* ============================= */
+
+.edu-page__degree {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 56pxHookForm 40px;
+  padding: 56px 48px;
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+}
+
+.edu-page__degree:last-child {
+  border-bottom: none;
+}
+
+/* LEFT COLUMN */
+.edu-page__degree-left {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Period */
+.edu-page__period {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* School Name — CLEAN & BALANCED */
+.edu-page__school {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.2vw, 26px);
+  letter-spacing: 0.03em;
+  color: var(--blue);
+  line-height: 1.25;
+  font-weight: 600;
+  max-width: 260px;
+  word-break: break-word;
+}
+
+/* RIGHT COLUMN */
+.edu-page__degree-right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 6px;
+}
+
+.edu-page__degree-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3vw, 44px);
+  letter-spacing: 0.02em;
+  color: var(--black);
+  line-height: 1.1;
+}
+
+.edu-page__focus {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--muted);
+  font-weight: 300;
+  max-width: 680px;
+}
+
+/* ============================= */
+/* CERTIFICATIONS SECTION */
+/* ============================= */
+
+.edu-page__certs {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 32px;
+}
+
+.edu-page__cert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 26px 36px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.edu-page__cert:last-child {
+  border-bottom: none;
+}
+
+.edu-page__cert:hover {
+  background: var(--blue-light);
+  transform: translateX(4px);
+}
+
+.edu-page__cert-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.edu-page__cert-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--black);
+}
+
+.edu-page__cert-org {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+.edu-page__cert-year {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--blue);
+  background: var(--blue-light);
+  padding: 6px 14px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+/* ============================= */
+/* RESPONSIVE */
+/* ============================= */
+
+@media (max-width: 1024px) {
+  .edu-page__degree {
+    grid-template-columns: 200px 1fr;
+    gap: 40px;
+    padding: 48px 36px;
+  }
+}
+
+@media (max-width: 768px) {
+  .edu-page__degree {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 36px 24px;
+  }
+
+  .edu-page__school {
+    max-width: 100%;
+  }
+
+  .edu-page__cert {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 22px 24px;
+  }
+}

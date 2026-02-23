@@ -1,0 +1,61 @@
+.ribbon {
+  width: 100%;
+  overflow: hidden;
+  background: var(--black);
+  padding: 20px 0;
+  cursor: default;
+  user-select: none;
+}
+
+.ribbon__track {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  will-change: transform;
+  white-space: nowrap;
+  width: max-content;
+}
+
+.ribbon__item {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 32px;
+  font-family: var(--font-display);
+  font-size: 28px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.ribbon__item--link {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  position: relative;
+}
+
+.ribbon__item--link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 32px;
+  right: 32px;
+  height: 1px;
+  background: var(--blue);
+  transform: scaleX(0);
+  transition: transform 0.25s ease;
+  transform-origin: left;
+}
+
+.ribbon__item--link:hover {
+  color: #fff;
+}
+
+.ribbon__item--link:hover::after {
+  transform: scaleX(1);
+}
+
+.ribbon__item--sep {
+  color: var(--blue);
+  font-size: 16px;
+  padding: 0 8px;
+}

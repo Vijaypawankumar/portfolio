@@ -1,0 +1,143 @@
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: clip; /* clips children at boundary without creating stacking context issues */
+  background: var(--white);
+}
+
+/* Subtle grid bg */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(37, 99, 235, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+
+.hero__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.hero__hello {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.hero__name-wrapper {
+  position: relative;
+}
+
+.hero__name {
+  font-family: var(--font-display);
+  font-size: clamp(80px, 18vw, 240px);
+  line-height: 0.88;
+  letter-spacing: 0.01em;
+  color: var(--blue);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.hero__star {
+  margin: 4px 0;
+  animation: spin-star 12s linear infinite;
+}
+
+@keyframes spin-star {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.hero__intro {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 400px;
+  font-weight: 300;
+}
+
+.hero__scroll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  transition: color 0.2s ease;
+}
+
+.hero__scroll:hover {
+  color: var(--blue);
+}
+
+.hero__scroll-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.hero__scroll-arrow {
+  font-size: 18px;
+  animation: bounce 1.8s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* Badge — full hero overlay so card can drag freely anywhere */
+.hero__badge-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hero__badge-wrapper canvas {
+  pointer-events: all !important;
+}
+
+.hero__badge-loader {
+  width: 100%;
+  height: 100%;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hero__badge-wrapper {
+    opacity: 0.85;
+  }
+  .hero__content {
+    z-index: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero__name {
+    font-size: clamp(56px, 18vw, 100px);
+  }
+}
