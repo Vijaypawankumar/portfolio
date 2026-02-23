@@ -118,7 +118,7 @@
   color: var(--muted);
 }
 
-/* Hero image */
+/* Hero image — real photo via backgroundImage */
 .proj-detail__hero-img {
   max-width: 1200px;
   margin: 0 auto 80px;
@@ -130,19 +130,22 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  background-size: cover;
+  background-position: center;
 }
 
-.proj-detail__hero-noise {
+/* Dark overlay for text legibility over real photos */
+.proj-detail__hero-dim {
   position: absolute;
   inset: 0;
-  opacity: 0.4;
-  mix-blend-mode: overlay;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 0;
 }
 
 .proj-detail__hero-label {
   font-family: var(--font-display);
   font-size: 120px;
-  color: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.12);
   letter-spacing: 0.05em;
   user-select: none;
   position: relative;
@@ -201,10 +204,13 @@
   position: relative;
 }
 
+/* Real image background on related cards */
 .proj-detail__related-img {
   width: 100%;
   height: 100%;
   position: relative;
+  background-size: cover;
+  background-position: center;
   transition: transform 0.4s ease;
 }
 
@@ -215,12 +221,12 @@
 .proj-detail__related-dim {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.25);
+  background: rgba(0, 0, 0, 0.25);
   transition: background 0.3s ease;
 }
 
 .proj-detail__related-card:hover .proj-detail__related-dim {
-  background: rgba(0,0,0,0.45);
+  background: rgba(0, 0, 0, 0.45);
 }
 
 .proj-detail__related-label-block {
@@ -255,7 +261,7 @@
 .proj-detail__related-meta {
   font-family: var(--font-mono);
   font-size: 9px;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
   letter-spacing: 0.1em;
 }
 

@@ -44,9 +44,8 @@ export default function ProjectsPage() {
             >
               <div
                 className="proj-page-card__img"
-                style={{ background: `linear-gradient(145deg, ${p.color} 0%, ${p.accent}20 100%)` }}
+                style={{ backgroundImage: `url(${p.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
               >
-                <div className="proj-page-card__noise" />
                 <div className="proj-page-card__dim" />
               </div>
               <div className="proj-page-card__label">

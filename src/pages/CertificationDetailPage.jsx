@@ -96,25 +96,18 @@ export default function CertificationDetailPage() {
         </div>
       </motion.div>
 
-      {/* Visual Hero Banner */}
+      {/* Hero — real certificate image */}
       <motion.div
         className="cert-detail__hero"
-        style={{ background: `linear-gradient(135deg, ${cert.color} 0%, ${cert.accent}88 100%)` }}
         initial={{ opacity: 0, y: 32 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3 }}
       >
-        <div className="cert-detail__hero-inner">
-          <div className="cert-detail__hero-badge">
-            <ShieldIcon />
-          </div>
-          <div className="cert-detail__hero-text">
-            <span className="cert-detail__hero-issuer">{cert.issuer}</span>
-            <span className="cert-detail__hero-name">{cert.title}</span>
-            <span className="cert-detail__hero-authority">{cert.authority}</span>
-          </div>
-        </div>
-        <span className="cert-detail__hero-watermark">{cert.year}</span>
+        <img
+          src={cert.image}
+          alt={cert.title}
+          className="cert-detail__hero-img"
+        />
       </motion.div>
 
       {/* Related Certificates */}
@@ -137,7 +130,11 @@ export default function CertificationDetailPage() {
             >
               <div
                 className="cert-detail__related-img"
-                style={{ background: `linear-gradient(135deg, ${c.color} 0%, ${c.accent}55 100%)` }}
+                style={{
+                  backgroundImage: `url(${c.image})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
               >
                 <div className="cert-detail__related-dim" />
                 <div className="cert-detail__related-label-block">
@@ -150,14 +147,5 @@ export default function CertificationDetailPage() {
         </div>
       </div>
     </div>
-  )
-}
-
-function ShieldIcon() {
-  return (
-    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-      <path d="M24 4L8 10v14c0 9.4 6.8 18.2 16 20.4C33.2 42.2 40 33.4 40 24V10L24 4z" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.6)" strokeWidth="2"/>
-      <path d="M18 24l4 4 8-8" stroke="rgba(255,255,255,0.9)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
   )
 }

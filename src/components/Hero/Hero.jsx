@@ -1,9 +1,9 @@
-import { useEffect, useRef, Suspense } from 'react'
+import { useEffect, useRef, Suspense, useState } from 'react'
 import { motion } from 'framer-motion'
 import { lazy } from 'react'
 import './Hero.css'
 
-// Only lazy-load Badge on desktop — don't ship the 3D bundle to mobile at all
+// Only load Badge bundle on desktop — mobile never downloads 3D code
 const isDesktop = typeof window !== 'undefined' && window.innerWidth > 1024
 const Badge = isDesktop ? lazy(() => import('../Badge/Badge')) : null
 
@@ -28,6 +28,15 @@ const fadeUp = {
 
 export default function Hero() {
   const scrollRef = useRef(null)
+
+  // ✅ Lazy mount: Badge renders only after 100ms
+  // Hero text + layout paint instantly, then 3D mounts
+  const [showBadge, setShowBadge] = useState(false)
+  useEffect(() => {
+    if (!isDesktop) return
+    const t = setTimeout(() => setShowBadge(true), 100)
+    return () => clearTimeout(t)
+  }, [])
 
   useEffect(() => {
     const el = scrollRef.current
@@ -54,29 +63,24 @@ export default function Hero() {
         initial="hidden"
         animate="visible"
       >
-        {/* Label */}
         <motion.p className="hero__hello" variants={fadeUp}>
           Hello, I am
         </motion.p>
 
-        {/* Name */}
         <motion.div className="hero__name-wrapper" variants={fadeUp}>
           <h1 className="hero__name">Vijay Pavan</h1>
         </motion.div>
 
-        {/* Blue star */}
         <motion.div className="hero__star" variants={fadeUp}>
           <StarIcon />
         </motion.div>
 
-        {/* Intro */}
         <motion.p className="hero__intro" variants={fadeUp}>
           Associate System Engineer - Trainee
           <br />
           building immersive digital experiences.
         </motion.p>
 
-        {/* Scroll indicator */}
         <motion.button
           className="hero__scroll"
           variants={fadeUp}
@@ -89,8 +93,8 @@ export default function Hero() {
         </motion.button>
       </motion.div>
 
-      {/* 3D Badge — desktop only, not rendered or loaded on mobile/tablet */}
-      {Badge && (
+      {/* 3D Badge — desktop only, mounted 100ms after text paints */}
+      {Badge && showBadge && (
         <div className="hero__badge-wrapper">
           <Suspense fallback={<div className="hero__badge-loader" />}>
             <Badge />

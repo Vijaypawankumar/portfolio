@@ -1,4 +1,4 @@
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { projects } from '../components/Projects/Projects'
 import './PageLayout.css'
@@ -22,43 +22,25 @@ export default function ProjectDetailPage() {
     )
   }
 
-  // Other projects for related section
   const related = projects.filter((p) => p.slug !== slug).slice(0, 2)
 
   return (
     <div className="page">
-      {/* Back link */}
-      <motion.div
-        className="proj-detail__back"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
-        <button
-          className="proj-detail__back-btn"
-          onClick={() => { navigate('/projects'); window.scrollTo(0, 0) }}
-        >
+
+      {/* Back */}
+      <motion.div className="proj-detail__back" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+        <button className="proj-detail__back-btn" onClick={() => { navigate('/projects'); window.scrollTo(0, 0) }}>
           ← Projects
         </button>
       </motion.div>
 
       {/* Title */}
-      <motion.div
-        className="proj-detail__header"
-        initial={{ opacity: 0, y: 32 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.1 }}
-      >
+      <motion.div className="proj-detail__header" initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}>
         <h1 className="proj-detail__title">{project.title}</h1>
       </motion.div>
 
-      {/* Meta + Description grid */}
-      <motion.div
-        className="proj-detail__meta-wrap"
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-      >
+      {/* Meta + Description */}
+      <motion.div className="proj-detail__meta-wrap" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
         <div className="proj-detail__meta-grid">
           <div className="proj-detail__meta-item">
             <span className="proj-detail__meta-label">Industry</span>
@@ -87,17 +69,19 @@ export default function ProjectDetailPage() {
         </div>
       </motion.div>
 
-      {/* Hero image */}
+      {/* Hero image — real photo instead of gradient */}
       <motion.div
         className="proj-detail__hero-img"
-        style={{
-          background: `linear-gradient(145deg, ${project.color} 0%, ${project.accent}30 100%)`,
-        }}
         initial={{ opacity: 0, y: 32 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3 }}
+        style={{
+          backgroundImage: `url(${project.image})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
       >
-        <div className="proj-detail__hero-noise" />
+        <div className="proj-detail__hero-dim" />
         <span className="proj-detail__hero-label">{project.title}</span>
       </motion.div>
 
@@ -105,10 +89,7 @@ export default function ProjectDetailPage() {
       <div className="proj-detail__related">
         <div className="proj-detail__related-header">
           <span className="proj-detail__related-label">RELATED PROJECTS</span>
-          <button
-            className="proj-detail__view-all"
-            onClick={() => { navigate('/projects'); window.scrollTo(0, 0) }}
-          >
+          <button className="proj-detail__view-all" onClick={() => { navigate('/projects'); window.scrollTo(0, 0) }}>
             VIEW ALL PROJECTS
           </button>
         </div>
@@ -121,9 +102,7 @@ export default function ProjectDetailPage() {
             >
               <div
                 className="proj-detail__related-img"
-                style={{
-                  background: `linear-gradient(145deg, ${p.color} 0%, ${p.accent}20 100%)`,
-                }}
+                style={{ backgroundImage: `url(${p.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
               >
                 <div className="proj-detail__related-dim" />
                 <div className="proj-detail__related-label-block">

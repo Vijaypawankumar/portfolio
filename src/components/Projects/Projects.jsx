@@ -7,17 +7,18 @@ export const projects = [
   {
     id: 1,
     slug: 'multimodal-alzheimers-screening',
-    title: 'Multimodal Alzheimer’s Screening',
+    title: "Multimodal Alzheimer's Screening",
     year: '2025',
     category: 'AI / Healthcare',
     industry: 'Medical AI',
     client: 'Academic Research',
     service: 'Deep Learning System',
     date: 'January 2025',
-    desc: 'Developed a multimodal deep learning system combining retinal fundus images and speech recordings for early Alzheimer’s detection. Implemented EfficientNet-based visual encoder and CNN-based audio pipeline with attention fusion.',
+    desc: "Developed a multimodal deep learning system combining retinal fundus images and speech recordings for early Alzheimer's detection. Implemented EfficientNet-based visual encoder and CNN-based audio pipeline with attention fusion.",
     tags: ['PyTorch', 'OpenCV', 'Deep Learning', 'Grad-CAM'],
     color: '#0f172a',
     accent: '#2563eb',
+    image: '/alzhimers.jpeg',
   },
   {
     id: 2,
@@ -33,6 +34,7 @@ export const projects = [
     tags: ['Blender', 'CAD', 'Drone Design', 'Simulation'],
     color: '#111827',
     accent: '#22c55e',
+    image: '/seed-dropping-drone.jpeg',
   },
   {
     id: 3,
@@ -48,6 +50,7 @@ export const projects = [
     tags: ['Watsonx.ai', 'LLMs', 'Cloud', 'AI Agents'],
     color: '#1e293b',
     accent: '#0f62fe',
+    image: '/ai-carrier-counciling.jpeg',
   },
   {
     id: 4,
@@ -63,6 +66,7 @@ export const projects = [
     tags: ['OpenCV', 'Open3D', 'Structure from Motion', '3D Vision'],
     color: '#0b132b',
     accent: '#3b82f6',
+    image: '/video-to-3d.jpeg',
   },
 ]
 
@@ -93,9 +97,7 @@ export default function Projects() {
         >
           <span className="section-label section-label--strong">Projects</span>
           <span className="section-line" />
-          <span className="section-loader">
-            <span className="section-loader__bar" />
-          </span>
+          <span className="section-loader"><span className="section-loader__bar" /></span>
           <span className="section-nav-arrow">›</span>
         </motion.div>
 
@@ -110,27 +112,20 @@ export default function Projects() {
               variants={{
                 hidden: { opacity: 0, y: 40 },
                 visible: {
-                  opacity: 1,
-                  y: 0,
+                  opacity: 1, y: 0,
                   transition: { duration: 0.6, delay: i * 0.12 + 0.2, ease: [0.22, 1, 0.36, 1] },
                 },
               }}
             >
               <div
                 className="project-card__img"
-                style={{
-                  background: `linear-gradient(145deg, ${p.color} 0%, ${p.accent}18 100%)`,
-                }}
+                style={{ backgroundImage: `url(${p.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
               >
-                <div className="project-card__noise" />
                 <div className="project-card__dim" />
               </div>
-
               <div className="project-card__label">
                 <span className="project-card__label-title">{p.title}</span>
-                <span className="project-card__label-meta">
-                  {p.year} · {p.category}
-                </span>
+                <span className="project-card__label-meta">{p.year} · {p.category}</span>
               </div>
             </motion.div>
           ))}
@@ -142,10 +137,7 @@ export default function Projects() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.7, duration: 0.5 }}
         >
-          <button
-            className="projects__view-btn"
-            onClick={() => { navigate('/projects'); window.scrollTo(0, 0) }}
-          >
+          <button className="projects__view-btn" onClick={() => { navigate('/projects'); window.scrollTo(0, 0) }}>
             VIEW ALL PROJECTS
           </button>
         </motion.div>

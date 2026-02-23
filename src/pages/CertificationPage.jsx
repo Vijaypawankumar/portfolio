@@ -65,12 +65,14 @@ export default function CertificationPage() {
               variants={fadeUp}
               initial="hidden"
               animate={inView ? 'visible' : 'hidden'}
-              onClick={() => {
-                navigate(`/certification/${cert.slug}`)
-                window.scrollTo(0, 0)
-              }}
+              onClick={() => { navigate(`/certification/${cert.slug}`); window.scrollTo(0, 0) }}
               style={{ cursor: 'pointer' }}
             >
+              {/* Real certificate thumbnail */}
+              <div className="cert-page__thumb">
+                <img src={cert.image} alt={cert.title} />
+              </div>
+
               <div className="cert-page__left">
                 <div className="cert-page__meta">
                   <span className="cert-page__level">{cert.level}</span>
