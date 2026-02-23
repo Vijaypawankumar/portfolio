@@ -14,10 +14,8 @@ import { MeshLineGeometry, MeshLineMaterial } from 'meshline'
 
 extend({ MeshLineGeometry, MeshLineMaterial })
 
-// Preload everything before component mounts — eliminates load lag
-useGLTF.preload(
-  'https://assets.vercel.com/image/upload/contentful/image/e5382hct74si/5huRVDzcoDwnbgrKUo1Lzs/53b6dd7d6b4ffcdbd338fa60265949e1/tag.glb'
-)
+// ✅ Local GLB — served from public/tag.glb, no external round-trip
+useGLTF.preload('/tag.glb')
 useTexture.preload('/tcs-rope.png')
 useTexture.preload('/my-card.png')
 
@@ -36,17 +34,14 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
 
   const segmentProps = {
     type: 'dynamic',
-    canSleep: false, // never sleep — keeps physics live from frame 1
+    canSleep: false,
     colliders: false,
     angularDamping: 2,
     linearDamping: 2,
   }
 
-  const { nodes } = useGLTF(
-    'https://assets.vercel.com/image/upload/contentful/image/e5382hct74si/5huRVDzcoDwnbgrKUo1Lzs/53b6dd7d6b4ffcdbd338fa60265949e1/tag.glb'
-  )
-
-  // Both textures loaded synchronously inside Suspense — no pop-in
+  // ✅ Local GLB
+  const { nodes } = useGLTF('/tag.glb')
   const ropeTexture = useTexture('/tcs-rope.png')
   const cardTexture = useTexture('/my-card.png')
 
@@ -65,7 +60,6 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
   const [dragged, drag] = useState(false)
   const [hovered, hover] = useState(false)
 
-  // Configure textures once on mount — no repeated updates
   useEffect(() => {
     ropeTexture.wrapS = THREE.RepeatWrapping
     ropeTexture.wrapT = THREE.ClampToEdgeWrapping
@@ -179,7 +173,6 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
               )
             }}
           >
-            {/* CARD */}
             <mesh geometry={nodes.card.geometry}>
               <meshPhysicalMaterial
                 map={cardTexture}
@@ -190,8 +183,6 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
                 envMapIntensity={1.2}
               />
             </mesh>
-
-            {/* CLIP */}
             <mesh geometry={nodes.clip.geometry}>
               <meshPhysicalMaterial
                 color="#111111"
@@ -199,8 +190,6 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
                 metalness={0.4}
               />
             </mesh>
-
-            {/* CLAMP */}
             <mesh geometry={nodes.clamp.geometry}>
               <meshPhysicalMaterial
                 color="#222222"
@@ -212,7 +201,6 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
         </RigidBody>
       </group>
 
-      {/* ROPE */}
       <mesh ref={band}>
         <meshLineGeometry />
         <meshLineMaterial
@@ -225,30 +213,6 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
         />
       </mesh>
     </>
-  )
-}
-
-// Thin CSS fade-in shown while 3D loads — no white flash, no layout shift
-function Loader() {
-  return (
-    <div style={{
-      position: 'absolute',
-      inset: 0,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'transparent',
-    }}>
-      <div style={{
-        width: 24,
-        height: 24,
-        borderRadius: '50%',
-        border: '2px solid rgba(0,0,0,0.08)',
-        borderTopColor: '#2563EB',
-        animation: 'badge-spin 0.7s linear infinite',
-      }} />
-      <style>{`@keyframes badge-spin { to { transform: rotate(360deg) } }`}</style>
-    </div>
   )
 }
 
@@ -265,29 +229,15 @@ export default function Badge() {
           toneMappingExposure: 0.95,
           outputColorSpace: THREE.SRGBColorSpace,
         }}
-        style={{
-          width: '100%',
-          height: '100%',
-          background: 'transparent',
-        }}
-        // Start rendering immediately — don't wait for first interaction
+        style={{ width: '100%', height: '100%', background: 'transparent' }}
         frameloop="always"
       >
         <ambientLight intensity={0.18} />
         <directionalLight position={[5, 8, 8]} intensity={0.85} />
         <directionalLight position={[-10, 5, -10]} intensity={0.6} />
 
-        {/*
-          Suspense wraps Band so the canvas renders the environment
-          immediately while textures + GLB finish loading.
-          Physics starts as soon as Band mounts — no extra delay.
-        */}
         <Suspense fallback={null}>
-          <Physics
-            interpolate
-            gravity={[0, -40, 0]}
-            timeStep={1 / 60}
-          >
+          <Physics interpolate gravity={[0, -40, 0]} timeStep={1 / 60}>
             <Band />
           </Physics>
           <Environment preset="warehouse" environmentIntensity={0.7} />

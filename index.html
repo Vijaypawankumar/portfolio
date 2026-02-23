@@ -5,9 +5,34 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Portfolio — Creative Developer</title>
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+    <!--
+      ✅ PRELOAD HINTS — browser starts fetching these assets the moment
+      the HTML arrives, before React has even parsed or executed.
+      This is the biggest single win for 3D load time.
+
+      Only active on desktop (badge is hidden on mobile via JS/CSS),
+      but preload hints are lightweight and ignored if asset isn't used.
+    -->
+
+    <!-- GLB model — largest asset, start fetching first -->
+    <link rel="preload" href="/tag.glb" as="fetch" crossorigin />
+
+    <!-- Card and rope textures -->
+    <link rel="preload" href="/my-card.png" as="image" />
+    <link rel="preload" href="/tcs-rope.png" as="image" />
+
+    <!--
+      DNS prefetch for the warehouse HDR environment preset
+      (loaded by @react-three/drei from unpkg CDN)
+    -->
+    <link rel="dns-prefetch" href="https://unpkg.com" />
+    <link rel="preconnect" href="https://unpkg.com" crossorigin />
   </head>
   <body>
     <div id="root"></div>
