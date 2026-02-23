@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { useEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { Canvas, extend, useThree, useFrame } from '@react-three/fiber'
 import { useGLTF, useTexture, Environment } from '@react-three/drei'
 import {
@@ -14,10 +14,10 @@ import { MeshLineGeometry, MeshLineMaterial } from 'meshline'
 
 extend({ MeshLineGeometry, MeshLineMaterial })
 
+// Preload everything before component mounts — eliminates load lag
 useGLTF.preload(
   'https://assets.vercel.com/image/upload/contentful/image/e5382hct74si/5huRVDzcoDwnbgrKUo1Lzs/53b6dd7d6b4ffcdbd338fa60265949e1/tag.glb'
 )
-
 useTexture.preload('/tcs-rope.png')
 useTexture.preload('/my-card.png')
 
@@ -36,7 +36,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
 
   const segmentProps = {
     type: 'dynamic',
-    canSleep: true,
+    canSleep: false, // never sleep — keeps physics live from frame 1
     colliders: false,
     angularDamping: 2,
     linearDamping: 2,
@@ -46,6 +46,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
     'https://assets.vercel.com/image/upload/contentful/image/e5382hct74si/5huRVDzcoDwnbgrKUo1Lzs/53b6dd7d6b4ffcdbd338fa60265949e1/tag.glb'
   )
 
+  // Both textures loaded synchronously inside Suspense — no pop-in
   const ropeTexture = useTexture('/tcs-rope.png')
   const cardTexture = useTexture('/my-card.png')
 
@@ -64,10 +65,23 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
   const [dragged, drag] = useState(false)
   const [hovered, hover] = useState(false)
 
-  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1])
-  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1])
-  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1])
-  useSphericalJoint(j3, card, [[0, 0, 0], [0, 1.45, 0]])
+  // Configure textures once on mount — no repeated updates
+  useEffect(() => {
+    ropeTexture.wrapS = THREE.RepeatWrapping
+    ropeTexture.wrapT = THREE.ClampToEdgeWrapping
+    ropeTexture.colorSpace = THREE.SRGBColorSpace
+    ropeTexture.anisotropy = 16
+    ropeTexture.needsUpdate = true
+  }, [ropeTexture])
+
+  useEffect(() => {
+    cardTexture.flipY = false
+    cardTexture.colorSpace = THREE.SRGBColorSpace
+    cardTexture.wrapS = THREE.ClampToEdgeWrapping
+    cardTexture.wrapT = THREE.ClampToEdgeWrapping
+    cardTexture.anisotropy = 16
+    cardTexture.needsUpdate = true
+  }, [cardTexture])
 
   useEffect(() => {
     if (hovered) {
@@ -76,28 +90,10 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
     }
   }, [hovered, dragged])
 
-  // Rope texture settings
-  useEffect(() => {
-    if (ropeTexture) {
-      ropeTexture.wrapS = THREE.RepeatWrapping
-      ropeTexture.wrapT = THREE.ClampToEdgeWrapping
-      ropeTexture.colorSpace = THREE.SRGBColorSpace
-      ropeTexture.anisotropy = 16
-      ropeTexture.needsUpdate = true
-    }
-  }, [ropeTexture])
-
-  // Card texture settings
-  useEffect(() => {
-    if (cardTexture) {
-      cardTexture.flipY = false
-      cardTexture.colorSpace = THREE.SRGBColorSpace
-      cardTexture.wrapS = THREE.ClampToEdgeWrapping
-      cardTexture.wrapT = THREE.ClampToEdgeWrapping
-      cardTexture.anisotropy = 16
-      cardTexture.needsUpdate = true
-    }
-  }, [cardTexture])
+  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1])
+  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1])
+  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1])
+  useSphericalJoint(j3, card, [[0, 0, 0], [0, 1.45, 0]])
 
   useFrame((state, delta) => {
     if (dragged) {
@@ -195,7 +191,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
               />
             </mesh>
 
-            {/* FRAME */}
+            {/* CLIP */}
             <mesh geometry={nodes.clip.geometry}>
               <meshPhysicalMaterial
                 color="#111111"
@@ -218,48 +214,85 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
 
       {/* ROPE */}
       <mesh ref={band}>
-  <meshLineGeometry />
-  <meshLineMaterial
-    map={ropeTexture}
-    useMap
-    repeat={[-3, 1]}
-    resolution={[width, height]}
-    lineWidth={1}
-    depthTest={false}
-  />
-</mesh>
+        <meshLineGeometry />
+        <meshLineMaterial
+          map={ropeTexture}
+          useMap
+          repeat={[-3, 1]}
+          resolution={[width, height]}
+          lineWidth={1}
+          depthTest={false}
+        />
+      </mesh>
     </>
+  )
+}
+
+// Thin CSS fade-in shown while 3D loads — no white flash, no layout shift
+function Loader() {
+  return (
+    <div style={{
+      position: 'absolute',
+      inset: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'transparent',
+    }}>
+      <div style={{
+        width: 24,
+        height: 24,
+        borderRadius: '50%',
+        border: '2px solid rgba(0,0,0,0.08)',
+        borderTopColor: '#2563EB',
+        animation: 'badge-spin 0.7s linear infinite',
+      }} />
+      <style>{`@keyframes badge-spin { to { transform: rotate(360deg) } }`}</style>
+    </div>
   )
 }
 
 export default function Badge() {
   return (
-    <Canvas
-      shadows
-      camera={{ position: [0, 0, 13], fov: 25 }}
-      gl={{
-        alpha: true,
-        antialias: true,
-        toneMapping: THREE.ACESFilmicToneMapping,
-        toneMappingExposure: 0.95,
-        outputColorSpace: THREE.SRGBColorSpace,
-      }}
-      style={{
-        width: '100%',
-        height: '100%',
-        background: 'transparent',
-      }}
-    >
-      <ambientLight intensity={0.18} />
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <Canvas
+        shadows
+        camera={{ position: [0, 0, 13], fov: 25 }}
+        gl={{
+          alpha: true,
+          antialias: true,
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 0.95,
+          outputColorSpace: THREE.SRGBColorSpace,
+        }}
+        style={{
+          width: '100%',
+          height: '100%',
+          background: 'transparent',
+        }}
+        // Start rendering immediately — don't wait for first interaction
+        frameloop="always"
+      >
+        <ambientLight intensity={0.18} />
+        <directionalLight position={[5, 8, 8]} intensity={0.85} />
+        <directionalLight position={[-10, 5, -10]} intensity={0.6} />
 
-      <directionalLight position={[5, 8, 8]} intensity={0.85} />
-      <directionalLight position={[-10, 5, -10]} intensity={0.6} />
-
-      <Physics interpolate gravity={[0, -40, 0]} timeStep={1 / 60}>
-        <Band />
-      </Physics>
-
-      <Environment preset="warehouse" environmentIntensity={0.7} />
-    </Canvas>
+        {/*
+          Suspense wraps Band so the canvas renders the environment
+          immediately while textures + GLB finish loading.
+          Physics starts as soon as Band mounts — no extra delay.
+        */}
+        <Suspense fallback={null}>
+          <Physics
+            interpolate
+            gravity={[0, -40, 0]}
+            timeStep={1 / 60}
+          >
+            <Band />
+          </Physics>
+          <Environment preset="warehouse" environmentIntensity={0.7} />
+        </Suspense>
+      </Canvas>
+    </div>
   )
 }

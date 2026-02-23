@@ -3,7 +3,9 @@ import { motion } from 'framer-motion'
 import { lazy } from 'react'
 import './Hero.css'
 
-const Badge = lazy(() => import('../Badge/Badge'))
+// Only lazy-load Badge on desktop — don't ship the 3D bundle to mobile at all
+const isDesktop = typeof window !== 'undefined' && window.innerWidth > 1024
+const Badge = isDesktop ? lazy(() => import('../Badge/Badge')) : null
 
 const stagger = {
   hidden: {},
@@ -87,12 +89,14 @@ export default function Hero() {
         </motion.button>
       </motion.div>
 
-      {/* 3D Badge — positioned right of center */}
-      <div className="hero__badge-wrapper">
-        <Suspense fallback={<div className="hero__badge-loader" />}>
-          <Badge />
-        </Suspense>
-      </div>
+      {/* 3D Badge — desktop only, not rendered or loaded on mobile/tablet */}
+      {Badge && (
+        <div className="hero__badge-wrapper">
+          <Suspense fallback={<div className="hero__badge-loader" />}>
+            <Badge />
+          </Suspense>
+        </div>
+      )}
     </section>
   )
 }

@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: clip; /* clips children at boundary without creating stacking context issues */
+  overflow: clip;
   background: var(--white);
 }
 
@@ -126,16 +126,16 @@
   height: 100%;
 }
 
-/* Responsive */
-@media (max-width: 900px) {
+/* ─── Responsive ─────────────────────────────────────────── */
+
+/* Tablets and below — hide badge entirely */
+@media (max-width: 1024px) {
   .hero__badge-wrapper {
-    opacity: 0.85;
-  }
-  .hero__content {
-    z-index: 1;
+    display: none;
   }
 }
 
+/* Small mobile — shrink name */
 @media (max-width: 600px) {
   .hero__name {
     font-size: clamp(56px, 18vw, 100px);
