@@ -6,7 +6,7 @@ const items = [
   { label: '✦', href: null },
   { label: 'LinkedIn', href: 'https://linkedin.com/in/vijay-pavan-kumar-yeruva-23b4262b2' },
   { label: '✦', href: null },
-  { label: 'Resume', href: '/resume.pdf' }, // Put your resume inside public folder
+  { label: 'Resume', href: '/resume.pdfC:\Users\pavan\OneDrive\Desktop\sampfol\public\SIST-B.E-CSE-42612055-Yeruva_Vijay_pavan_kumar_reddy.pdf' }, // Put your resume inside public folder
   { label: '✦', href: null },
 ]
 
